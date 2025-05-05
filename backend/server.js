@@ -112,14 +112,15 @@ app.post("/api/check-proxy", async (req, res) => {
   return res.status(200).json({ data: filterArrey });
 });
 
-app.listen(PORT, () => {
-  processProxies();
-  console.log(`✅ Server is running on http://localhost:${PORT}`);
-});
 app.use(express.static(path.join(__dirname, "../frontend/build")));
 app.get("*", (req, res) => {
   if (req.path.startsWith("/api")) {
     return res.status(404).send("API route not found");
   }
   res.sendFile(path.join(__dirname, "../frontend/build/index.html"));
+});
+
+app.listen(PORT, () => {
+  processProxies();
+  console.log(`✅ Server is running on http://localhost:${PORT}`);
 });
