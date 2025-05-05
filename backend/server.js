@@ -116,3 +116,7 @@ app.listen(PORT, () => {
   processProxies();
   console.log(`✅ Server is running on http://localhost:${PORT}`);
 });
+app.use(express.static(path.join(__dirname, "../frontend/build")));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/build/index.html"));
+});
