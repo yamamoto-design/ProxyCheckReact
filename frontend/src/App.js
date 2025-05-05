@@ -5,9 +5,12 @@ function App() {
   const [showResult, setShowResult] = useState([]);
 
   const handleSearch = async () => {
-    let data = await axios.post("http://localhost:5000/api/check-proxy", {
-      country: search,
-    });
+    let data = await axios.post(
+      `${process.env.REACT_APP_BACKEND_URL}/api/check-proxy`,
+      {
+        country: search,
+      }
+    );
     console.log(data.data.data);
 
     setShowResult(data.data.data);

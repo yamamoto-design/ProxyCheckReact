@@ -13,6 +13,8 @@ app.use(express.json());
 
 const results = [];
 
+const buildPath = path.join(__dirname, "../frontend/build");
+
 const inputFile = path.join(__dirname, "Denton.txt");
 
 async function getExitIP(proxyStr) {
@@ -112,13 +114,21 @@ app.post("/api/check-proxy", async (req, res) => {
   return res.status(200).json({ data: filterArrey });
 });
 
-app.use(express.static(path.join(__dirname, "../frontend/build")));
-app.get("*", (req, res) => {
-  if (req.path.startsWith("/api")) {
-    return res.status(404).send("API route not found");
-  }
-  res.sendFile(path.join(__dirname, "../frontend/build/index.html"));
-});
+// app.use(express.static(path.join(__dirname, "../frontend/build")));
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "../frontend/build/index.html"));
+// });
+
+if (fs.existsSync(buildPath)) {
+  app.use(express.static(buildPath));
+  app.get(/(.*)/, (req, res) => {
+    res.sendFile(path.join(buildPath, "index.html"));
+  });
+} else {
+  console.warn(
+    "⚠️  Frontend build folder not found, skipping static route setup"
+  );
+}
 
 app.listen(PORT, () => {
   processProxies();
